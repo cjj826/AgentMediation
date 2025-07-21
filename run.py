@@ -11,6 +11,7 @@ import os
 import argparse
 from tqdm import *
 import src.globals as globals
+from src.utils import json_to_mediation_word
 
 def run(data, id, dir, args):
     globals.total_token = 0
@@ -20,7 +21,7 @@ def run(data, id, dir, args):
         "num_turns": args.num_turns,
         "case_content": "default",
         "model_name": args.model_name,
-        "temperature": 0,
+        "temperature": 0.9,
         "max_tokens": 1024,
         "default": True,
         "basic_back": data['basic_back'],
@@ -61,21 +62,23 @@ def run(data, id, dir, args):
         vent_arena = SimpleArena(players, mediator, stage=3, environment=vent_env, adaptive=args.adaptive)
         vent_history, vent_messages = vent_arena.launch_cli(interactive=False)
         output_dict['vent_messages'] = vent_messages
+        mediator.add_vent_history(vent_history)
+        for player in players:
+            player.add_vent_history(vent_history)
     else:
         vent_history = []
 
-    mediator.add_vent_history(vent_history)
-    for player in players:
-        player.add_vent_history(vent_history)
-
     # Stage4: Option generation
     mediation_option = mediator.generate_mediation_option(facts, retrieve_articles)
-
+    # 调整1
+    # mediation_option = {}
+    # mediation_option['调解方案'] = mediator.generate_mediation_option(facts, retrieve_articles)
+    # # 调整
     output_dict['mediation_option'] = mediation_option
 
     mediator.add_mediation_history(mediation_option['调解方案'])
     for player in players:
-        player.add_mediation_history(mediation_option)
+        player.add_mediation_history(mediation_option['调解方案'])
 
     # Stage5: Bargaining and negotiation 
     # 各方对调解方案进行讨论
@@ -84,20 +87,21 @@ def run(data, id, dir, args):
     bargain_history, bargain_messages = bargain_arena.launch_cli(interactive=False)
     output_dict['bargain_messsages'] = bargain_messages
 
-    mediator.add_bargain_history(bargain_history)
+    mediator.add_bargain_history(bargain_messages)
 
     # Final: 调解员总结出一个调解方案
     final_mediation = mediator.generate_final_option(facts, retrieve_articles)
     print("=====")
-    print(final_mediation)
+    print(final_mediation['调解方案'])
     print("调解结束")
 
     output_dict['final_mediation'] = final_mediation
 
     # judge 阶段
     output_dict['result'] = []
-    judge = Judge(background.global_prompt, config)
-    result = judge(bargain_messages, final_mediation['调解方案'])
+    result = {}
+    # judge = Judge(background.global_prompt, config)
+    # result = judge(bargain_messages, final_mediation['调解方案'])
     statis_dict = {}
     accept_dict = {}
     for p in players:
@@ -162,7 +166,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     path = f"{args.num_turns}_{args.model_name}_{args.baseline}_{args.assertiveness}_{args.cooperativeness}_{args.adaptive}_{args.conflict_type}_{args.modify_factor}_{args.vent}"
-    input_datas = open('./data/case_back.json', 'r').readlines()[:1]
+    input_datas = open('./data/case_back.json', 'r').readlines()
     result_json_list = []
     os.makedirs(f'./test_{args.date}', exist_ok=True)
     output = open(f'./test_{args.date}/{path}.json', 'w')
@@ -184,4 +188,15 @@ if __name__ == "__main__":
         for result in result_json_list:
             output.write(json.dumps(result, ensure_ascii=False) + '\n')
     else:
-        run(json.loads(input_datas[0]), 1, f"./output_{args.date}/temp_{path}", args)
+        test_case_id = 296
+        cache_dir = f"./output_{args.date}/temp_{path}"
+        os.makedirs(f'./output_{args.date}/temp_{path}', exist_ok=True)
+        file_path = os.path.join(cache_dir, f"{test_case_id}.json")
+        if os.path.exists(file_path):
+            print("已存在")
+            output_dict = json.load(open(file_path, 'r', encoding='utf-8'))
+        else:
+            output_dict = run(json.loads(input_datas[test_case_id]), test_case_id, f"./output_{args.date}/temp_{path}", args)
+        print(file_path)
+        json.dump(output_dict, open(file_path, 'w'), ensure_ascii=False)
+        json_to_mediation_word(output_dict, f"./output_{args.date}/temp_{path}/{test_case_id}.docx")

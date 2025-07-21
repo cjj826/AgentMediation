@@ -17,18 +17,10 @@ class State:
         self.mediator.make_statement()
         
         print()
-        player_statement = ""
+        player_statement = [{"agent_name": self.mediator.name, "statement": self.mediator.statement}]
         for player in self.players:
             player.make_statement()
-            player_statement += f"""=====
-{player.name}:
-{player.statement}
-"""
+            player_statement.append({"name": player.name, "statement": player.statement})
             print()
-        self.statement_history = f"""【各方自我介绍开始】
-=====
-{self.mediator.name}: 
-{self.mediator.statement}
-{player_statement}
-【各方自我介绍结束】
-"""
+            
+        self.statement_history = player_statement

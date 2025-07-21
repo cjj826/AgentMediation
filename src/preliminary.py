@@ -406,55 +406,55 @@ class Back:
         players = []
 
         # random sample one
-        index = random.randint(0, len(self.character_settings) - 1)
-        for i, party in enumerate(self.character_settings):
-            if self.config['baseline'] == False and i == index:
-                player = Player(
-                    name=party['name'],
-                    state=party['state'],
-                    global_prompt=self.global_prompt,
-                    mode='special',
-                    args=Namespace(
-                        model_name=self.config["model_name"],
-                        temperature=self.config["temperature"],
-                        max_tokens=self.config["max_tokens"],
-                        baseline=self.config['baseline'],
-                    ),
-                )
-            else:
-                player = Player(
-                    name=party['name'],
-                    state=party['state'],
-                    global_prompt=self.global_prompt,
-                    mode='baseline',
-                    args=Namespace(
-                        model_name=self.config["model_name"],
-                        temperature=self.config["temperature"],
-                        max_tokens=self.config["max_tokens"],
-                        baseline=self.config['baseline'],
-                    ),
-                )
-            players.append(player)
+        # index = random.randint(0, len(self.character_settings) - 1)
+        # for i, party in enumerate(self.character_settings):
+        #     if self.config['baseline'] == False and i == index:
+        #         player = Player(
+        #             name=party['name'],
+        #             state=party['state'],
+        #             global_prompt=self.global_prompt,
+        #             mode='special',
+        #             args=Namespace(
+        #                 model_name=self.config["model_name"],
+        #                 temperature=self.config["temperature"],
+        #                 max_tokens=self.config["max_tokens"],
+        #                 baseline=self.config['baseline'],
+        #             ),
+        #         )
+        #     else:
+        #         player = Player(
+        #             name=party['name'],
+        #             state=party['state'],
+        #             global_prompt=self.global_prompt,
+        #             mode='baseline',
+        #             args=Namespace(
+        #                 model_name=self.config["model_name"],
+        #                 temperature=self.config["temperature"],
+        #                 max_tokens=self.config["max_tokens"],
+        #                 baseline=self.config['baseline'],
+        #             ),
+        #         )
+        #     players.append(player)
 
         # replace all
-        # if self.config['baseline'] == False:
-        #     mode = "special"
-        # else:
-        #     mode = "baseline"
-        # for i, party in enumerate(self.character_settings):
-        #     player = Player(
-        #         name=party['name'],
-        #         state=party['state'],
-        #         global_prompt=self.global_prompt,
-        #         mode=mode,
-        #         args=Namespace(
-        #             model_name=self.config["model_name"],
-        #             temperature=self.config["temperature"],
-        #             max_tokens=self.config["max_tokens"],
-        #             baseline=self.config['baseline'],
-        #         ),
-        #     )
-        #     players.append(player)
+        if self.config['baseline'] == False:
+            mode = "special"
+        else:
+            mode = "baseline"
+        for i, party in enumerate(self.character_settings):
+            player = Player(
+                name=party['name'],
+                state=party['state'],
+                global_prompt=self.global_prompt,
+                mode=mode,
+                args=Namespace(
+                    model_name=self.config["model_name"],
+                    temperature=self.config["temperature"],
+                    max_tokens=self.config["max_tokens"],
+                    baseline=self.config['baseline'],
+                ),
+            )
+            players.append(player)
         return players
 
 
@@ -462,8 +462,13 @@ class Back:
         """
         生成一个调解员
         """
+        order = []
+        for p in self.character_settings:
+            order.append(p['name'])
+        print(order)
         mediator = Mediator(
             name="调解员李镇",
+            order=order,
             global_prompt=self.global_prompt,
             args=Namespace(
                 model_name=self.config["model_name"],
@@ -471,6 +476,7 @@ class Back:
                 max_tokens=self.config["max_tokens"],
                 baseline=self.config['baseline'],
             ),
+
         )
             
         return mediator

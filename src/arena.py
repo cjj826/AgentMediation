@@ -42,7 +42,7 @@ class SimpleArena:
             timestep = self.step()
             messages = timestep.get("observation", [])
 
-            print(f"\n🌀 Round {round_counter}\n")
+            print(f"\n🌀 Round {(round_counter - 1) // (len(self.players) + 1)}\n")
 
             display_msgs = messages if show_all else messages[-1:]
 

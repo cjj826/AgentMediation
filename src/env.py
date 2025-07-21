@@ -1,9 +1,9 @@
 class SimpleDebateEnv:
     def __init__(self, players, mediator, num_turns=3):
         self.player_names = []
+        self.player_names.append(mediator.name)
         for player in players:
             self.player_names.append(player.name)
-        self.player_names.append(mediator.name)
         self.current_turn = 0
         self.max_turns = num_turns
         self.history = []  # 存储所有对话记录

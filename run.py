@@ -167,6 +167,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     path = f"{args.num_turns}_{args.model_name}_{args.baseline}_{args.assertiveness}_{args.cooperativeness}_{args.adaptive}_{args.conflict_type}_{args.modify_factor}_{args.vent}"
     input_datas = open('./data/case_back.json', 'r').readlines()
+    # input_datas = open('./data/simulation.json', 'r').readlines()
     result_json_list = []
     os.makedirs(f'./test_{args.date}', exist_ok=True)
     output = open(f'./test_{args.date}/{path}.json', 'w')
@@ -188,15 +189,16 @@ if __name__ == "__main__":
         for result in result_json_list:
             output.write(json.dumps(result, ensure_ascii=False) + '\n')
     else:
-        test_case_id = 296
-        cache_dir = f"./output_{args.date}/temp_{path}"
-        os.makedirs(f'./output_{args.date}/temp_{path}', exist_ok=True)
-        file_path = os.path.join(cache_dir, f"{test_case_id}.json")
-        if os.path.exists(file_path):
-            print("已存在")
-            output_dict = json.load(open(file_path, 'r', encoding='utf-8'))
-        else:
-            output_dict = run(json.loads(input_datas[test_case_id]), test_case_id, f"./output_{args.date}/temp_{path}", args)
-        print(file_path)
-        json.dump(output_dict, open(file_path, 'w'), ensure_ascii=False)
-        json_to_mediation_word(output_dict, f"./output_{args.date}/temp_{path}/{test_case_id}.docx")
+        for test_case_id in range(len(input_datas)):
+        # for test_case_id in [324]:
+            cache_dir = f"./output_{args.date}/temp_{path}"
+            os.makedirs(f'./output_{args.date}/temp_{path}', exist_ok=True)
+            file_path = os.path.join(cache_dir, f"{test_case_id}.json")
+            if os.path.exists(file_path):
+                print("已存在")
+                output_dict = json.load(open(file_path, 'r', encoding='utf-8'))
+            else:
+                output_dict = run(json.loads(input_datas[test_case_id]), test_case_id, f"./output_{args.date}/temp_{path}", args)
+            print(file_path)
+            json.dump(output_dict, open(file_path, 'w'), ensure_ascii=False)
+            json_to_mediation_word(output_dict, f"./output_{args.date}/temp_{path}/{test_case_id}.docx")

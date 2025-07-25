@@ -17,7 +17,7 @@ AGENTMEDIATION/
 ├── src/
 │   ├── agent.py
 │   ├── arena.py
-│   ├── chat.py
+│   ├── chat-no-key.py
 │   ├── env.py
 │   ├── eval.py
 │   ├── globals.py

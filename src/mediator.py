@@ -201,22 +201,22 @@ class Mediator:
         messages=[{"role": "user", "content": self.generate_role_prompt() + prompt}]
         result = LLM(messages, self.args.model_name, self.args.temperature, self.args.max_tokens)
         old_statement = result['result']
-        if stage == 5:
-            # 考虑加入反思，检查这轮发言的质量，避免简单的幻觉问题
-            retry = 3
-            while retry > 0:
-                messages = [{"role": "user", "content": self.generate_role_prompt() + self.generate_reflection_prompt(observation, old_statement)}]
-                new_result = LLM(messages, self.args.model_name, self.args.temperature, self.args.max_tokens)
-                new_result = prase_json_from_response(new_result['result'])
+        # if stage == 5:
+        #     # 考虑加入反思，检查这轮发言的质量，避免简单的幻觉问题
+        #     retry = 3
+        #     while retry > 0:
+        #         messages = [{"role": "user", "content": self.generate_role_prompt() + self.generate_reflection_prompt(observation, old_statement)}]
+        #         new_result = LLM(messages, self.args.model_name, self.args.temperature, self.args.max_tokens)
+        #         new_result = prase_json_from_response(new_result['result'])
 
-                if new_result['是否存在严重问题'] == '是':
-                    print("\n\n", new_result)
-                    print("\n\n原来的发言：", old_statement)
-                    print("\n\n修正后的发言：", new_result['改进发言'])
-                    old_statement = new_result['改进发言']
-                    retry -= 1
-                else:
-                    break
+        #         if new_result['是否存在严重问题'] == '是':
+        #             print("\n\n", new_result)
+        #             print("\n\n原来的发言：", old_statement)
+        #             print("\n\n修正后的发言：", new_result['改进发言'])
+        #             old_statement = new_result['改进发言']
+        #             retry -= 1
+        #         else:
+        #             break
 
         return old_statement
     

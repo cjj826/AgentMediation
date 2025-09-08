@@ -1,4 +1,4 @@
-# AgentMediation
+# 	Simulating Dispute Mediation with LLM-Based Agents for Legal Research
 
 ![image-20250514235047045](./img/AgentMediation2.png)
 

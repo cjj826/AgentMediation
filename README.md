@@ -3,7 +3,7 @@
 ![image-20250514235047045](./img/AgentMediation2.png)
 
 Legal dispute mediation plays a crucial role in resolving civil disputes, yet its empirical study is limited by privacy constraints and complex multivariate interactions. To address this limitation, we present AgentMediation, the first LLM-based agent framework for simulating dispute mediation. It simulates realistic mediation processes grounded in real-world disputes and enables controlled experimentation on key variables such as disputant strategies, dispute causes, and mediator expertise.
-Our empirical analysis reveals patterns consistent with sociological theories, including Group Polarization and Surface Compliance. As a comprehensive and extensible platform, AgentMediation paves the way for deeper integration of social science and AI in legal research.
+Our empirical analysis reveals patterns consistent with sociological theories, including Group Polarization and Surface Compliance. As a comprehensive and extensible platform, AgentMediation paves the way for deeper integration of social science and AI in legal research. [paper link](https://arxiv.org/pdf/2509.06586)
 
 ---
 

@@ -1,4 +1,6 @@
-# 	Simulating Dispute Mediation with LLM-Based Agents for Legal Research
+# Simulating Dispute Mediation with LLM-Based Agents for Legal Research
+
+The official repo for our AAAI'26 Full paper: Simulating Dispute Mediation with LLM-Based Agents for Legal Research.
 
 ![image-20250514235047045](./img/AgentMediation2.png)
 
@@ -57,3 +59,15 @@ AGENTMEDIATION/
    ```
 
 ---
+
+## 🌟 Citations
+If you find our work useful, please do not save your star and cite our work:
+
+```
+@article{chen2025simulating,
+  title={Simulating Dispute Mediation with LLM-Based Agents for Legal Research},
+  author={Chen, Junjie and Li, Haitao and Qin, Minghao and Zhou, Yujia and Ren, Yanxue and Wang, Wuyue and Liu, Yiqun and Wu, Yueyue and Ai, Qingyao},
+  journal={arXiv preprint arXiv:2509.06586},
+  year={2025}
+}
+```
